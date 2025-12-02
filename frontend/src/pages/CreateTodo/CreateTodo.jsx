@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./CreateTodo.css";
-import axios from "axios";
+import api from "../../utils/api";
 
 const CreateTodo = () => {
   const [title, setTitle] = useState("");
@@ -16,12 +16,26 @@ const CreateTodo = () => {
   const handlSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("access");
+    if (!token) {
+      alert("You are not authenticated. Please login first.");
+      return;
+    }
+
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/todos/", {
-        title,
-        description,
-        completed,
-      });
+      const response = await api.post(
+        "http://127.0.0.1:8000/api/todos/",
+        {
+          title,
+          description,
+          completed,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setTitle("");
       setDescription("");
@@ -87,7 +101,9 @@ const CreateTodo = () => {
             />
           </div>
 
-          <button type="submit" id="create-btn">Save Todo</button>
+          <button type="submit" id="create-btn">
+            Save Todo
+          </button>
         </form>
       </div>
     </div>

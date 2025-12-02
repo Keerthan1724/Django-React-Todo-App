@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Navbar from "../../components/Navbar/Navbar";
 import edit_todo from "../../assets/edit_todo.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import "./TodoDetails.css";
+import api from "../../utils/api";
 
 const TodoDetails = () => {
   const { id } = useParams();
@@ -18,9 +18,16 @@ const TodoDetails = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/todos/${id}/`
+        const response = await api.get(
+          `http://127.0.0.1:8000/api/todos/${id}/`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setTodo(response.data);
 
@@ -32,16 +39,26 @@ const TodoDetails = () => {
           "Error:",
           error.response ? error.response.data : error.message
         );
+        if (error.response && error.response.status === 401) {
+          navigate("/");
+        }
       }
     };
 
     fetchTodos();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleUpdate = async () => {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
     try {
       const updateTodo = { title, description, completed };
-      const response = await axios.put(`http://127.0.0.1:8000/api/todos/${id}/`, updateTodo);
+      const response = await api.put(
+        `http://127.0.0.1:8000/api/todos/${id}/`,
+        updateTodo,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       setTodo(response.data);
       setIsEditing(false);

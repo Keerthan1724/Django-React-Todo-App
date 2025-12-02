@@ -9,6 +9,8 @@ urlpatterns = [
     path('signup/', views.SignupView.as_view()),
     path('login/', views.SigninView.as_view()),
     path('google-login/', views.GoogleLoginView.as_view(), name="google-login"),
+    path('send-otp/', views.SendOTP.as_view()),
+    path('verify-otp/', views.VerifyOTP.as_view()),
 ]
 
 urlpatterns += router.urls

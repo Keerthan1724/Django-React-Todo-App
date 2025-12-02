@@ -2,10 +2,14 @@ import { useState, useRef } from "react";
 import "./Authentication.css";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import google_color from "../../assets/google_color.svg";
+import api from "../../utils/api";
 
 const Authentication = () => {
+  const navigate = useNavigate();
+
   const [signState, setSignState] = useState("Sign In");
   const [authStep, setAuthStep] = useState("form");
 
@@ -15,6 +19,9 @@ const Authentication = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [buttonState, setButtonState] = useState("send");
+  const [timer, setTimer] = useState(0);
+
   const otpRefs = [useRef(), useRef(), useRef(), useRef()];
 
   const handleSignIn = async (e) => {
@@ -22,14 +29,17 @@ const Authentication = () => {
 
     try {
       const response = await axios.post("http://localhost:8000/api/login/", {
-        email,
+        username,
         password,
       });
 
       alert("Login success");
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
+
+      navigate("/create");
     } catch (error) {
+      console.log("LOGIN ERROR:", error.response?.data);
       alert("Invalid email or password");
     }
   };
@@ -46,38 +56,95 @@ const Authentication = () => {
 
       alert("Account created. Now sign in");
       setSignState("Sign In");
+      navigate("/");
     } catch (error) {
+      console.log(error.response.data);
       alert("Signup failed");
     }
   };
 
   const handleForgot = async () => {
+    setAuthStep("otp");
+    setButtonState("send");
+  };
+
+  const handleSendOrResendOtp = async () => {
     if (!email) {
-      alert("Enter email first");
+      alert("Enter email");
       return;
     }
 
     try {
       await axios.post("http://localhost:8000/api/send-otp/", { email });
-      setAuthStep("otp");
       alert("OTP sent");
+
+      setAuthStep("otp");
+      setButtonState("resend");
     } catch (error) {
       alert("Email not found");
     }
+
+    setTimer(59);
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   const handleOtpChange = (e, index) => {
+    const value = e.target.value.replace(/[^0-9]/g, "");
     const newOtp = [...otp];
-    newOtp[index] = e.target.value;
+    newOtp[index] = value;
     setOtp(newOtp);
 
-    if (e.target.value && index < 3) {
-      otpRefs[index + 1].current.focus();
+    if (value && index < 3) otpRefs[index + 1].current.focus();
+    if (!value && index > 0) otpRefs[index - 1].current.focus();
+
+    if (newOtp.every((x) => x !== "")) {
+      setButtonState("verify");
+    } else {
+      if (buttonState !== "send") setButtonState("resend");
     }
   };
 
-  const handleOtpSubmit = () => {
-    setAuthStep("reset");
+  const handleOtpButtonClick = async () => {
+    if (buttonState === "send" || buttonState === "resend") {
+      handleSendOrResendOtp();
+      return;
+    }
+
+    if (buttonState === "verify") {
+      const otpCode = otp.join("");
+      if (otpCode.length < 4) {
+        alert("Please enter complete OTP");
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/verify-otp/",
+          {
+            email,
+            otp: otpCode,
+          }
+        );
+
+        if (response.data.message === "OTP verified") {
+          alert("OTP verified. You can reset password now.");
+          setAuthStep("reset");
+        } else {
+          alert("Invalid OTP");
+        }
+      } catch (error) {
+        console.log("Error:", error.response?.data);
+        alert("Error verifying OTP");
+      }
+    }
   };
 
   const handleReset = async () => {
@@ -103,10 +170,10 @@ const Authentication = () => {
 
   const googleLogin = useGoogleLogin({
     flow: "implicit",
-    redirect_uri: "http://localhost:3000",
+    redirect_uri: "http://localhost:5173",
     onSuccess: async (tokenResponse) => {
       try {
-        console.log("TOKEN RESPONSE:", tokenResponse)
+        console.log("TOKEN RESPONSE:", tokenResponse);
         const response = await axios.post(
           "http://localhost:8000/api/google-login/",
           { token: tokenResponse.access_token }
@@ -116,6 +183,11 @@ const Authentication = () => {
         localStorage.setItem("refresh", response.data.refresh);
 
         alert("Google Login Successful");
+
+        localStorage.setItem("access", response.data.access);
+        localStorage.setItem("refresh", response.data.refresh);
+
+        navigate("/create");
       } catch (error) {
         alert("Backend Google login failed");
       }
@@ -134,18 +206,18 @@ const Authentication = () => {
             <div className="inputs-container">
               {signState === "Sign Up" && (
                 <input
-                  type="text"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               )}
 
               <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
 
               <input
@@ -172,10 +244,11 @@ const Authentication = () => {
                 {signState}
               </button>
 
-              {signState === "Sign In" &&
-              (<div className="divider">
-                <span>OR</span>
-              </div>)}
+              {signState === "Sign In" && (
+                <div className="divider">
+                  <span>OR</span>
+                </div>
+              )}
               {signState === "Sign In" && (
                 <div className="google-btn" onClick={googleLogin}>
                   <img src={google_color} alt="G" />
@@ -206,7 +279,15 @@ const Authentication = () => {
 
         {authStep === "otp" && (
           <>
-            <h1>Enter OTP</h1>
+            <h1>Forgot Password</h1>
+
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
             <div className="otp-box">
               {otp.map((v, i) => (
                 <input
@@ -220,9 +301,19 @@ const Authentication = () => {
               ))}
             </div>
 
-            <button type="button" onClick={handleOtpSubmit}>
-              Verify OTP
+            {timer > 0 && <p>{timer}s</p>}
+
+            <button type="button" onClick={handleOtpButtonClick}>
+              {buttonState === "send"
+                ? "Send OTP"
+                : buttonState === "resend"
+                ? "Resend OTP"
+                : "Verify OTP"}
             </button>
+
+            <p onClick={() => setAuthStep("form")} className="back-link">
+              Back
+            </p>
           </>
         )}
 

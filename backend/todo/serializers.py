@@ -9,6 +9,7 @@ class TodoSerializers(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = ['id', 'title', 'description', 'completed', 'created_at']
+        read_only_fields = ['user']
 
 #Signup Serializers
 
@@ -18,6 +19,7 @@ class SignupSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+        extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validate_data):
         user = User.objects.create_user(
@@ -30,5 +32,5 @@ class SignupSerializers(serializers.ModelSerializer):
 #Signin Serializers
 
 class SigninSerializers(serializers.Serializer):
-    email = serializers.EmailField()
+    username = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
