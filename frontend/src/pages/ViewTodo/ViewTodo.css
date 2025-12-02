@@ -1,0 +1,91 @@
+.view-todo{
+    margin-left: 320px;
+    margin-top: 40px;
+}
+
+.todo-list{
+    margin: 30px;
+    padding: 10px;
+}
+
+.todo-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+    padding: 12px 25px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: .2 ease;
+    border: 1px solid #eee;
+    height: 70px;
+}
+
+.todo-item:hover{
+    background: #f1f1f1;
+}
+
+.todo-item div{
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.delete-btn img:hover{
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.delete-btn img{
+    width: 20px;
+    opacity: .7;
+    transition: .2s;
+}
+
+.filters{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-left: 45px;
+}
+
+.filters button{
+    padding: 6px 14px;
+    border: none;
+    background: #ededed;
+    color: black;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: .2s ease;
+}
+
+.filters button.active{
+    background: #222;
+    color: white;
+}
+
+.filters button:hover{
+    background: #d9d9d9;
+}
+
+.filters button:focus{
+    outline: none;
+    background: #222;
+    color: white;
+}
+
+.view-todo-main-section h4{
+    padding-top: 20px;
+    margin-bottom: 40px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #222;
+}
+
+.view-todo hr{
+    border: none;
+    height: 3px;
+    background: black;
+    margin: 20px 20px;
+    border-radius: 10px;
+}

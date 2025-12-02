@@ -1,0 +1,171 @@
+.todo-details{
+    margin-left: 320px;
+}
+
+.todo-details-section{
+    max-width: 600px;
+    margin: 100px auto;
+    background: #f9f9f9;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 25px 30px;
+    position: relative;
+}
+
+.details-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.details-header h4{
+    margin: 0;
+    font-size: 20px;
+    color: #222;
+}
+
+.edit-icon{
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform(.2s);
+}
+
+.edit-icon:hover{
+    transform: scale(1.5);
+}
+
+h2 {
+    margin: 10px 0 15px 0;
+    font-size: 26px;
+    color: #333;
+    text-align: center;
+}
+
+.edit-input{
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    background: white;
+    color: black;
+}
+
+.edit-textarea{
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    background: white;
+    color: black;
+    min-height: 100px;
+    resize: none;
+    scrollbar-width: none;
+}
+
+.completed-row{
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.completed-row input[type="checkbox"]{
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #4a8bdf;
+    background: white;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;   
+    appearance: none;
+    display: grid; 
+    place-content: center;
+}
+
+.completed-row input[type="checkbox"]:checked {
+    background-color: #4a8bdf; 
+    border-color: #4a8bdf;
+}
+
+.completed-row input[type="checkbox"]:checked::before {
+    content: "✓"; 
+    font-size: 16px;
+    color: white;
+}
+
+.completed-row label{
+    font-size: 22px;
+}
+
+.created-date{
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.save-btn{
+    padding: 10px 18px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background .2s;
+    width: 100%;
+}
+
+.btns{
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.save-btn:hover{
+    background-color: #0d6ddf;
+}
+
+p {
+    font-size: 16px;
+    color: #666;
+    text-align: left;
+    margin-top: 5px;
+    line-height: 1.6;
+}
+
+.footer-row {
+    margin-top: 25px;
+    border-top: 1px solid #e2e2e2;
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.status-text {
+    text-align: right;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.status-text.completed {
+    color: #1aa31a;
+}
+
+.status-text.pending {
+    color: #d93636;
+}
+
+.description-txt{
+    white-space: pre-line;
+    padding: 0 40px;
+}
