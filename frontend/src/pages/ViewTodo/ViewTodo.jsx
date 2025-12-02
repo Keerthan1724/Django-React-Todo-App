@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./ViewTodo.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import delete_todo from "../../assets/delete_todo.svg";
+import api from "../../utils/api";
 
 const ViewTodo = () => {
   const [todos, setTodos] = useState([]);
@@ -12,8 +12,18 @@ const ViewTodo = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/todos/");
+        const response = await api.get("http://127.0.0.1:8000/api/todos/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setTodos(response.data);
       } catch (error) {
         console.log(
@@ -24,7 +34,7 @@ const ViewTodo = () => {
     };
 
     fetchTodos();
-  }, []);
+  }, [navigate]);
 
   const filteredTodos = todos.filter((todo) => {
     if (filter === "completed") return todo.completed === true;
@@ -35,11 +45,18 @@ const ViewTodo = () => {
   const handleDelete = async (e, id) => {
     e.stopPropagation();
 
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
     const confirmDelete = window.confirm("Delete this ?");
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/todos/${id}/`);
+      await api.delete(`http://127.0.0.1:8000/api/todos/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTodos((prev) => prev.filter((todo) => todo.id !== id));
       alert("Todo deleted");
     } catch (error) {
