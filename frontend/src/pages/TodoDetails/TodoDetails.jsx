@@ -4,6 +4,7 @@ import edit_todo from "../../assets/edit_todo.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import "./TodoDetails.css";
 import api from "../../utils/api";
+import { notify } from "../../utils/toastHelper";
 
 const TodoDetails = () => {
   const { id } = useParams();
@@ -62,7 +63,7 @@ const TodoDetails = () => {
 
       setTodo(response.data);
       setIsEditing(false);
-      alert("TODO updated");
+      notify("TODO updated", "success");
     } catch (error) {
       alert("Update Failed");
       console.log(

@@ -1,16 +1,18 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import TodoSerializers, SigninSerializers, SignupSerializers
+from django.core.mail import send_mail
+from .serializers import TodoSerializers, SigninSerializers, SignupSerializers, UserProfileSerializer
 from .models import Todo, EmailOTP
 import requests
-from rest_framework.permissions import IsAuthenticated
 import random
-from django.core.mail import send_mail
+import os
+
 
 #Todo view
 
@@ -105,6 +107,8 @@ class GoogleLoginView(APIView):
 #OTP sending view
 
 class SendOTP(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         email = request.data.get("email")
 
@@ -122,8 +126,9 @@ class SendOTP(APIView):
         send_mail(
             subject="Your OTP Code",
             message=f'Your OTP is {otp}',
-            from_email=None,
-            recipient_list=[email]
+            from_email=os.environ.get("EMAIL_HOST_USER"),
+            recipient_list=[email],
+            fail_silently=False
         )
 
         return Response({"message": "OTP sent"})
@@ -131,7 +136,9 @@ class SendOTP(APIView):
 #OTP verification
 
 class VerifyOTP(APIView):
-    def post(Self, request):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
         email = request.data.get("email")
         otp_entered = request.data.get("otp")
 
@@ -144,7 +151,73 @@ class VerifyOTP(APIView):
             latest_otp = EmailOTP.objects.filter(user=user).latest("created_at")
         except:
             return Response({"error": "OTP not found"}, status=404)
+        
+        if latest_otp.is_expired():
+            return Response({"error": "OTP expired"}, status=400)
+
         if latest_otp.otp == otp_entered:
             return Response({"message": "OTP verified"})
         else:
             return Response({"error": "Invalid OTP"}, status=400)
+        
+#Reset password view
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        otp_entered = request.data.get("otp")
+        new_password = request.data.get("new_password")
+
+        if not all([email, otp_entered, new_password]):
+            return Response({"error": "All fields required"}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            return Response({"error": "User not found"}, status=404)
+
+        try:
+            latest_otp = EmailOTP.objects.filter(user=user).latest("created_at")
+        except:
+            return Response({"error": "OTP not found"}, status=404)
+
+        if latest_otp.is_expired():
+            return Response({"error": "OTP expired"}, status=400)
+
+        if latest_otp.otp != otp_entered:
+            return Response({"error": "Invalid OTP"}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+
+        latest_otp.delete()
+
+        return Response({"message": "Password reset successful"})
+
+#UserProfile view
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
+    
+#UserProfileImage view
+
+class UploadProfileImageView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def  post(self, request):
+        file = request.FILES.get('profile_image')
+        if not file:
+            return Response({"error": "No file uploaded"}, status=400)
+        
+        profile = request.user.profile
+        profile.profile_image = file
+        profile.save()
+
+        return Response({"profile_image": profile.profile_image.url})
