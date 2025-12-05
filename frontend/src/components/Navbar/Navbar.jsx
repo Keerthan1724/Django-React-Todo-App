@@ -7,6 +7,13 @@ import account from "../../assets/account.svg";
 import logout from "../../assets/logout.svg";
 
 const Navbar = () => {
+
+  const handleLogout = () => {
+    localStorage.removeItem("access")
+    localStorage.removeItem("refresh")
+    alert("You logged out of APP!")
+  }
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-header">
@@ -28,7 +35,7 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/accpop">
+            <NavLink to="/account">
               <img src={account} alt="" />
               Account
             </NavLink>
@@ -37,7 +44,7 @@ const Navbar = () => {
       </div>
 
       <div className="sidebar-down">
-        <NavLink to="/">
+        <NavLink to="/" onClick={handleLogout}>
           <img src={logout} alt="" />
           Logout
         </NavLink>

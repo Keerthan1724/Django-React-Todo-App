@@ -1,11 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Authentication.css";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import google_color from "../../assets/google_color.svg";
-import api from "../../utils/api";
+import eye_open from "../../assets/eye_open.svg";
+import eye_closed from "../../assets/eye_closed.svg";
+import email_icon from "../../assets/email_icon.svg";
+import user_icon from "../../assets/user_icon.svg";
+import { notify } from "../../utils/toastHelper";
 
 const Authentication = () => {
   const navigate = useNavigate();
@@ -15,14 +18,21 @@ const Authentication = () => {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [buttonState, setButtonState] = useState("send");
   const [timer, setTimer] = useState(0);
+  const [otp, setOtp] = useState(["", "", "", ""]);
 
   const otpRefs = [useRef(), useRef(), useRef(), useRef()];
+
+  useEffect(() => {
+    if (timer === 0) {
+      setButtonState("resend");
+    }
+  }, [timer]);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -33,14 +43,14 @@ const Authentication = () => {
         password,
       });
 
-      alert("Login success");
+      notify("Login Successful", "success");
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
 
       navigate("/create");
     } catch (error) {
       console.log("LOGIN ERROR:", error.response?.data);
-      alert("Invalid email or password");
+      notify("Invalid email or password", "error");
     }
   };
 
@@ -54,12 +64,12 @@ const Authentication = () => {
         password,
       });
 
-      alert("Account created. Now sign in");
+      notify("Account created. Now sign in", "success");
       setSignState("Sign In");
       navigate("/");
     } catch (error) {
       console.log(error.response.data);
-      alert("Signup failed");
+      notify("Signup failed", "error");
     }
   };
 
@@ -70,30 +80,36 @@ const Authentication = () => {
 
   const handleSendOrResendOtp = async () => {
     if (!email) {
-      alert("Enter email");
+      notify("Enter email", "info");
+      return;
+    }
+
+    if (buttonState === "resend" && timer > 0) {
+      notify(`Please wait ${timer}s before resending OTP`, "info");
       return;
     }
 
     try {
       await axios.post("http://localhost:8000/api/send-otp/", { email });
-      alert("OTP sent");
+      notify("OTP sent to Your email", "success");
 
       setAuthStep("otp");
       setButtonState("resend");
-    } catch (error) {
-      alert("Email not found");
-    }
 
-    setTimer(59);
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+      setTimer(59);
+      const interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (error) {
+      console.log("Error sending OTP:", error.response?.data);
+      notify("Failed to send OTP", "error");
+    }
   };
 
   const handleOtpChange = (e, index) => {
@@ -108,7 +124,9 @@ const Authentication = () => {
     if (newOtp.every((x) => x !== "")) {
       setButtonState("verify");
     } else {
-      if (buttonState !== "send") setButtonState("resend");
+      if (timer === 0) {
+        setButtonState("resend");
+      }
     }
   };
 
@@ -121,7 +139,7 @@ const Authentication = () => {
     if (buttonState === "verify") {
       const otpCode = otp.join("");
       if (otpCode.length < 4) {
-        alert("Please enter complete OTP");
+        notify("Please enter complete OTP", "info");
         return;
       }
 
@@ -135,21 +153,29 @@ const Authentication = () => {
         );
 
         if (response.data.message === "OTP verified") {
-          alert("OTP verified. You can reset password now.");
+          notify("OTP verified. You can reset password now.", "success");
           setAuthStep("reset");
         } else {
-          alert("Invalid OTP");
+          notify("Invalid OTP", "error");
         }
       } catch (error) {
-        console.log("Error:", error.response?.data);
-        alert("Error verifying OTP");
+        const msg = error.response?.data?.error || "Verification failed";
+        console.log("OTP VERIFY ERROR =>", msg);
+
+        alert(msg);
+
+        if (msg.toLowerCase().includes("expired")) {
+          setButtonState("resend");
+          setTimer(0);
+          setOtp(["", "", "", ""]);
+        }
       }
     }
   };
 
   const handleReset = async () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      notify("Passwords do not match", "error");
       return;
     }
 
@@ -160,11 +186,15 @@ const Authentication = () => {
         new_password: password,
       });
 
-      alert("Password reset successful");
+      notify("Password reset successful", "success");
       setAuthStep("form");
       setSignState("Sign In");
+      setOtp(["", "", "", ""]);
+      setPassword("");
+      setConfirmPassword("");
     } catch (error) {
-      alert("Invalid OTP or error");
+      console.log("Reset error:", error.response?.data);
+      notify("Invalid OTP or error", "error");
     }
   };
 
@@ -179,20 +209,17 @@ const Authentication = () => {
           { token: tokenResponse.access_token }
         );
 
-        localStorage.setItem("access", response.data.access);
-        localStorage.setItem("refresh", response.data.refresh);
-
-        alert("Google Login Successful");
+        notify("Google Login Successful", "success");
 
         localStorage.setItem("access", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
 
         navigate("/create");
       } catch (error) {
-        alert("Backend Google login failed");
+        notify("Backend Google login failed", "error");
       }
     },
-    onError: () => alert("Google Login Failed"),
+    onError: () => notify("Google Login Failed", "error"),
   });
 
   return (
@@ -205,27 +232,40 @@ const Authentication = () => {
             <h1>{signState}</h1>
             <div className="inputs-container">
               {signState === "Sign Up" && (
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="input-wrapper">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <img src={email_icon} alt="" />
+                </div>
               )}
 
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <img src={user_icon} alt="" />
+              </div>
 
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <img
+                  src={showPassword ? eye_open : eye_closed}
+                  alt="toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              </div>
 
               {signState === "Sign In" && (
                 <p className="forgot-pass" onClick={handleForgot}>
@@ -281,18 +321,21 @@ const Authentication = () => {
           <>
             <h1>Forgot Password</h1>
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <div className="input-wrapper">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <img src={email_icon} alt="" />
+            </div>
 
             <div className="otp-box">
               {otp.map((v, i) => (
                 <input
                   key={i}
-                  type="password"
+                  type="text"
                   maxLength="1"
                   ref={otpRefs[i]}
                   value={v}
@@ -301,7 +344,12 @@ const Authentication = () => {
               ))}
             </div>
 
-            {timer > 0 && <p>{timer}s</p>}
+            {timer > 0 && (
+              <p>
+                {Math.floor(timer / 60)} : {String(timer % 60).padStart(2, "0")}{" "}
+                s
+              </p>
+            )}
 
             <button type="button" onClick={handleOtpButtonClick}>
               {buttonState === "send"
@@ -321,13 +369,24 @@ const Authentication = () => {
           <>
             <h1>Reset Password</h1>
             <div>
-              <input type="email" value={email} readOnly />
+              <div className="inpu-wrapper">
+                <input type="email" value={email} readOnly />
+                <img src={email_icon} alt="" />
+              </div>
 
-              <input
-                type="password"
-                placeholder="New password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="inpu-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <img
+                  src={showPassword ? eye_open : eye_closed}
+                  alt="toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              </div>
 
               <input
                 type="password"
@@ -335,7 +394,13 @@ const Authentication = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
 
-              <button type="button" onClick={handleReset}>
+              <button
+                type="button"
+                onClick={handleReset}
+                disabled={
+                  otp.join("").length < 4 || !password || !confirmPassword
+                }
+              >
                 Reset Password
               </button>
             </div>

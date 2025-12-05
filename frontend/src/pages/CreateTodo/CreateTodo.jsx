@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./CreateTodo.css";
 import api from "../../utils/api";
+import { notify } from "../../utils/toastHelper";
 
 const CreateTodo = () => {
   const [title, setTitle] = useState("");
@@ -18,7 +19,7 @@ const CreateTodo = () => {
 
     const token = localStorage.getItem("access");
     if (!token) {
-      alert("You are not authenticated. Please login first.");
+      notify("You are not authenticated. Please login first.", "error");
       return;
     }
 
@@ -41,13 +42,13 @@ const CreateTodo = () => {
       setDescription("");
       setCompleted(false);
 
-      alert("TODO Created Successfully!");
+      notify("TODO Created Successfully!", "success");
     } catch (error) {
       console.error(
         "Error creating todo:",
         error.response ? error.response.data : error.message
       );
-      alert("Failed to create TODO");
+      notify("Failed to create TODO", "error");
     }
   };
 

@@ -71,6 +71,7 @@
     color: #4a8bdf;
     cursor: pointer;
     font-size: 14px;
+    transition: .2s;
 }
 
 .forgot-pass:hover{
@@ -207,4 +208,27 @@
 
 .auth-form .back-link:hover{
   text-decoration: underline;
+}
+
+
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-wrapper input {
+  padding-right: 40px;
+}
+
+.input-wrapper img {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-70%);
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
 }

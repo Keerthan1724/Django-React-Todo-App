@@ -4,6 +4,7 @@ import "./ViewTodo.css";
 import { useNavigate } from "react-router-dom";
 import delete_todo from "../../assets/delete_todo.svg";
 import api from "../../utils/api";
+import { notify } from "../../utils/toastHelper";
 
 const ViewTodo = () => {
   const [todos, setTodos] = useState([]);
@@ -58,9 +59,9 @@ const ViewTodo = () => {
         },
       });
       setTodos((prev) => prev.filter((todo) => todo.id !== id));
-      alert("Todo deleted");
+      notify("Todo deleted", "success");
     } catch (error) {
-      alert("Failed to delete Todo");
+      notify("Failed to delete Todo", "error");
       console.log(
         "Error:",
         error.response ? error.response.data : error.message
