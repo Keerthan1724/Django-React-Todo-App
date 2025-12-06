@@ -79,7 +79,8 @@
     margin-bottom: 40px;
     font-size: 30px;
     font-weight: 600;
-    color: #222;
+    color: #1e90ff;
+    text-transform: uppercase;
 }
 
 .view-todo hr{
@@ -88,4 +89,62 @@
     background: black;
     margin: 20px 20px;
     border-radius: 10px;
+}
+
+
+@media (max-width: 700px) {
+
+    .view-todo {
+        margin-left: 0;
+        margin-top: 75px; 
+        padding: 15px;
+    }
+
+    .view-todo-main-section h4 {
+        padding-top: 0;
+        font-size: 20px;
+        margin-left: 5px;
+        margin-bottom: 25px;
+    }
+
+    .filters {
+        margin-left: 0;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .filters button {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .todo-list {
+        margin: 8px 0;
+        padding: 0;
+    }
+
+    .todo-item {
+        padding: 8px 10px;
+        height: auto;
+        min-height: 55px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        word-wrap: break-word;
+    }
+
+    .todo-item div {
+        font-size: 15px;
+        width: 80%;
+        line-height: 20px;
+        text-align: left;
+    }
+
+    .delete-btn img {
+        width: 18px;
+    }
+
+    .view-todo hr {
+        margin: 10px 0 20px 0;
+    }
 }

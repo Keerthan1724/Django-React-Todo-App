@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from .serializers import TodoSerializers, SigninSerializers, SignupSerializers, UserProfileSerializer
 from .models import Todo, EmailOTP
+from .emails import send_welcome_email, send_otp_email
 import requests
 import random
 import os
@@ -34,7 +35,10 @@ class SignupView(APIView):
     def post(self, request):
         serializer = SignupSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
+
+        send_welcome_email(user)
+
         return Response({"message": "Account created"}, status=status.HTTP_201_CREATED)
     
 class SigninView(APIView):
@@ -84,12 +88,17 @@ class GoogleLoginView(APIView):
 
             if not email:
                 return Response({"error": "Cannot get email from Google"}, status=400)
-
+            
+            user_created = False
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 username = email.split("@")[0]
                 user = User.objects.create_user(username=username, email=email)
+                user_created = True
+
+            if user_created:
+                send_welcome_email(user)
 
             refresh = RefreshToken.for_user(user)
 
@@ -123,13 +132,7 @@ class SendOTP(APIView):
         otp = str(random.randint(1000, 9999))
         EmailOTP.objects.create(user=user, otp=otp)
 
-        send_mail(
-            subject="Your OTP Code",
-            message=f'Your OTP is {otp}',
-            from_email=os.environ.get("EMAIL_HOST_USER"),
-            recipient_list=[email],
-            fail_silently=False
-        )
+        send_otp_email(user, otp)
 
         return Response({"message": "OTP sent"})
 

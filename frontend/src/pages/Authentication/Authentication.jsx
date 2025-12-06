@@ -369,12 +369,12 @@ const Authentication = () => {
           <>
             <h1>Reset Password</h1>
             <div>
-              <div className="inpu-wrapper">
+              <div className="input-wrapper">
                 <input type="email" value={email} readOnly />
                 <img src={email_icon} alt="" />
               </div>
 
-              <div className="inpu-wrapper">
+              <div className="input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"

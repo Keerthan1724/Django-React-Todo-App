@@ -43,6 +43,11 @@ h2 {
     font-size: 26px;
     color: #333;
     text-align: center;
+    word-wrap: break-word;
+}
+
+p{
+    word-wrap: break-word;
 }
 
 .edit-input{
@@ -68,6 +73,13 @@ h2 {
     min-height: 100px;
     resize: none;
     scrollbar-width: none;
+}
+
+.edit-input:focus,
+.edit-textarea:focus {
+    outline: none;
+    border-color: #4a8bdf;
+    box-shadow: 0 0 0 2px rgba(74, 139, 223, .15);
 }
 
 .completed-row{
@@ -104,6 +116,9 @@ h2 {
 
 .completed-row label{
     font-size: 22px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12px;
 }
 
 .created-date{
@@ -168,4 +183,98 @@ p {
 .description-txt{
     white-space: pre-line;
     padding: 0 40px;
+}
+
+@media (max-width: 700px) {
+
+    .todo-details {
+        margin-left: 0;
+        padding: 15px;
+        margin-top: 70px;
+    }
+
+    .todo-details-section {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .details-header {
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+    }
+
+    .details-header h4 {
+        font-size: 15px;
+    }
+
+    .edit-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    h2 {
+        font-size: 14px;
+        margin: 15px 0;
+        padding: 0 5px;
+    }
+
+    .edit-input {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .edit-textarea {
+        font-size: 12px;
+        padding: 5px 8px;
+        min-height: 70px;
+        margin-bottom: 0;
+    }
+
+    .description-txt {
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .completed-row label {
+        font-size: 13px;
+    }
+
+    .completed-row input[type="checkbox"]{
+        height: 14px;
+        width: 14px;
+    }
+
+    .status-text {
+        font-size: 12px;
+        text-align: right;
+        margin: 15px 0 5px 0;
+    }
+
+    .footer-row {
+        padding-top: 8px;
+        margin-top: 10px;
+        justify-content: flex-end;
+    }
+
+    .footer-row p {
+        font-size: 10px;
+    }
+
+    .btns {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .save-btn {
+        width: 100%;
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .save-btn.cancel{
+        background: transparent;
+        color: #1e90ff;
+    }
 }

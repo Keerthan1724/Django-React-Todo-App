@@ -9,10 +9,11 @@
     left: 0;
     top: 0;
     padding: 20px 10px;
+    z-index: 1200;
 }
 
 .sidebar-header h4{
-    color: lightblue;
+    color: #1e90ff;
     margin-bottom: 30px;
     font-size: 30px;
     font-weight: bold;
@@ -82,4 +83,116 @@
     width: 30px;
     margin-right: 20px;
     padding-bottom: 2px;
+}
+
+.mobile-hamburger {
+    display: none;
+    position: fixed;
+    top: 0.9px;
+    left: 5px;
+    z-index: 2000;
+    background-color: transparent;
+    color: black;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 5px;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 900;
+}
+
+.top-bar {
+    display: none;
+}
+
+.top-logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1e90ff;
+}
+
+/* Sidebar overlay on mobile */
+@media (max-width: 700px) {
+  .sidebar-container {
+    left: -320px;
+    top: 0;
+    width: 320px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    position: fixed;
+    background-color: #1e1e1e;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+  }
+
+  .sidebar-container.open {
+    left: 0;
+  }
+
+  .mobile-hamburger {
+    display: block;
+  }
+
+  .sidebar-container {
+    width: 260px;
+  }
+
+  .sidebar-header h4 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-up ul li {
+    height: 50px;
+    padding: 6px;
+  }
+
+  .sidebar-up ul li a {
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .sidebar-up ul li a img {
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
+  }
+
+  .sidebar-down {
+    height: 50px;
+  }
+
+  .sidebar-down a {
+    font-size: 16px;
+  }
+
+  .sidebar-down a img{
+    height: 22px;
+    width: 22px;
+  }
+
+  .top-bar{
+    width: 100%;
+    height: 60px;
+    background: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    padding-top: 6px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
 }

@@ -1,116 +1,117 @@
-.auth-page{
-    width: 100%;
-    min-height: 100vh;
-    background: #f5f6fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 40px;
-    box-sizing: border-box;
+.auth-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f6fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  box-sizing: border-box;
 }
 
-.auth-logo{
-    position: absolute;
-    top: 20px;
-    left: 30px;
-    font-size: 30px;
-    font-weight: bold;
-    user-select: none;
+.auth-logo {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  user-select: none;
+  color: #1e90ff;
 }
 
-.auth-form{
-    width: 500px;
-    background: white;
-    padding: 35px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.08);
-    margin-top: 80px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+.auth-form {
+  width: 500px;
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 80px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
-.auth-form h1{
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 25px;
-    color: #6c5ce7;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 2px;
+.auth-form h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 25px;
+  color: #6c5ce7;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .auth-form > div.inputs-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
 }
 
-.auth-form input{
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 14px;
-    border-radius: 8px;
-    border: 1px solid #dadada;
-    font-size: 15px;
-    outline: none;
-    transition: .2s;
-    background: #eee;
-    color: black;
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #dadada;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s;
+  background: #eee;
+  color: black;
 }
 
-.auth-form input:focus{
-    border-color: #4a8bdf;
-    box-shadow: 0 0 0 2px rgba(74, 139, 223, .15);
+.auth-form input:focus {
+  border-color: #4a8bdf;
+  box-shadow: 0 0 0 2px rgba(74, 139, 223, 0.15);
 }
 
-.forgot-pass{
-    text-align: right;
-    margin-bottom: 14px;
-    color: #4a8bdf;
-    cursor: pointer;
-    font-size: 14px;
-    transition: .2s;
+.forgot-pass {
+  text-align: right;
+  margin-bottom: 14px;
+  color: #4a8bdf;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
 }
 
-.forgot-pass:hover{
-    text-decoration: underline;
+.forgot-pass:hover {
+  text-decoration: underline;
 }
 
-.auth-form button{
-    width: 100%;
-    padding: 12px;
-    background: #4a8bdf;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: .25s;
+.auth-form button {
+  width: 100%;
+  padding: 12px;
+  background: #4a8bdf;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
 .auth-form button:hover {
-    background: #3a78c2;
+  background: #3a78c2;
 }
 
-.form-switch{
-    text-align: center;
-    margin-top: 20px;
-    font-size: 16px;
-    color: #555;
-    padding: 0;
-    transition: all .25s ease;
+.form-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #555;
+  padding: 0;
+  transition: all 0.25s ease;
 }
 
-.form-switch span{
-    color: #4a8bdf;
-    font-weight: 600;
-    cursor: pointer;
+.form-switch span {
+  color: #4a8bdf;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.form-switch span:hover{
-    text-decoration: underline;
+.form-switch span:hover {
+  text-decoration: underline;
 }
 
 .google-btn {
@@ -167,14 +168,14 @@
 
 /* otp page */
 
-.otp-box{
+.otp-box {
   display: flex;
   justify-content: center;
   gap: 12px;
   margin: 20px 0;
 }
 
-.otp-box input{
+.otp-box input {
   width: 55px;
   height: 55px;
   text-align: center;
@@ -183,12 +184,12 @@
   border-radius: 8px;
   outline: none;
   background: white;
-  transition: .2s;
+  transition: 0.2s;
 }
 
-.otp-box input:focus{
+.otp-box input:focus {
   border-color: #4a8bdf;
-  box-shadow: 0 0 0 3px rgba(74, 139, 223, .15);
+  box-shadow: 0 0 0 3px rgba(74, 139, 223, 0.15);
 }
 
 .otp-box + p {
@@ -198,7 +199,7 @@
   font-weight: 500;
 }
 
-.auth-form .back-link{
+.auth-form .back-link {
   margin-top: 20px;
   text-align: center;
   cursor: pointer;
@@ -206,11 +207,9 @@
   font-weight: 500;
 }
 
-.auth-form .back-link:hover{
+.auth-form .back-link:hover {
   text-decoration: underline;
 }
-
-
 
 .input-wrapper {
   position: relative;
@@ -231,4 +230,104 @@
   width: 22px;
   height: 22px;
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .auth-form {
+    width: 90%;
+    padding: 20px;
+    margin-top: 90px;
+  }
+
+  .auth-logo {
+    width: 100%;
+    height: 60px;
+    background: white;
+    color: #1e90ff;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 14px;
+    position: fixed;
+    font-size: 25px;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .input-wrapper input {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .input-wrapper img {
+    height: 18px;
+    width: 18px;
+    transform: translateY(-16px);
+  }
+
+  .auth-form button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .form-switch {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
+  .form-switch span {
+    font-weight: 500;
+  }
+
+  .google-btn {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .google-btn span {
+    font-size: 12px;
+  }
+
+  .google-btn img {
+    width: 15px;
+    height: 15px;
+  }
+
+  .divider {
+    margin: 10px 0;
+    font-size: 12px;
+  }
+
+  .divider span {
+    margin: 0 8px;
+    font-weight: 400;
+  }
+
+  .forgot-pass {
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .auth-form input {
+    margin-bottom: 10px;
+  }
+
+  .auth-form h1 {
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+
+  .otp-box input {
+    width: 45px;
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .auth-form .back-link {
+    margin-top: 10px;
+    margin-bottom: 6px;
+    font-weight: 400;
+    font-size: 12px;
+  }
 }

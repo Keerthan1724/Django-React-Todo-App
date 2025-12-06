@@ -91,7 +91,7 @@ const CreateTodo = () => {
             ></textarea>
           </div>
 
-          <div className="form-row">
+          <div className="form-row ch">
             <label htmlFor="completed">Completed</label>
             <input
               type="checkbox"

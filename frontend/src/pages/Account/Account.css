@@ -112,3 +112,82 @@
     padding: 10px 15px;
     border-radius: 8px;
 }
+
+
+@media (max-width: 700px) {
+
+    .account-page {
+        padding-top: 50px;
+        justify-content: flex-start;
+        background: #f5f5f5;
+    }
+
+    .account-container {
+        margin-left: 0;
+        padding: 20px;
+        max-width: 100%;
+    }
+
+    .account-container h1 {
+        font-size: 20px;
+        margin: 20px 0 30px;
+        letter-spacing: 2px;
+    }
+
+    .acc-center-box {
+        width: 100%;
+        padding: 25px 15px;
+        gap: 20px;
+        border-radius: 16px;
+    }
+
+    .profile-pic-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+
+    .profile-pic {
+        border-width: 1px;
+    }
+
+    .upload-btn {
+        width: 18px;
+        height: 18px;
+        bottom: 4px;
+        right: 0;
+    }
+
+    .upload-btn img {
+        width: 9px;
+        height: 9px;
+    }
+
+    .user-info-box {
+        padding: 0 8px;
+        font-size: 12px;
+        gap: 2px;
+    }
+
+    .user-info-box p {
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 14px;
+        gap: 5px;
+        margin-bottom: 2px;
+    }
+
+    .user-info-box p strong {
+        white-space: nowrap;
+    }
+
+    .stat-card {
+        padding: 0;
+        min-width: 100%;
+    }
+
+    .stat-card p {
+        padding: 10px;
+        font-size: 13px;
+        font-weight: 400;
+    }
+}

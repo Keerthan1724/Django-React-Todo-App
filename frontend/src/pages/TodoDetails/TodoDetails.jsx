@@ -127,7 +127,7 @@ const TodoDetails = () => {
           </div>
         ) : (
           <h4 className={`status-text ${completed ? "completed" : "pending"}`}>
-            {completed ? "COMPLETED" : "NOT COMPLETED"}
+            {completed ? "✔️ COMPLETED" : "❌ NOT COMPLETED"}
           </h4>
         )}
 
@@ -157,7 +157,7 @@ const TodoDetails = () => {
             <button className="save-btn" onClick={handleUpdate}>
               Save Changes
             </button>
-            <button className="save-btn" onClick={() => setIsEditing(false)}>
+            <button className="save-btn cancel" onClick={() => setIsEditing(false)}>
               Cancel
             </button>
           </div>
