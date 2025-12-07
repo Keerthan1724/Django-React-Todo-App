@@ -1,20 +1,19 @@
-# Core Django
 Django>=5.0
-
-# API Framework
 djangorestframework
 django-cors-headers
-
-# Authentication (JWT)
 djangorestframework-simplejwt
 
-# Google Login & Networking
+# Google Login
 google-auth
 google-auth-oauthlib
 requests
 
-# Environment Variables (Best practice for hiding API keys)
+# Env Variables
 python-dotenv
 
-django-core
-datetime
+# MySQL
+pymysql
+mysqlclient
+
+# Images
+Pillow
