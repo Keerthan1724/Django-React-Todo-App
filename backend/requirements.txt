@@ -1,19 +1,28 @@
-Django>=5.0
-djangorestframework
-django-cors-headers
-djangorestframework-simplejwt
-
-# Google Login
-google-auth
-google-auth-oauthlib
-requests
-
-# Env Variables
-python-dotenv
-
-# MySQL
-pymysql
-mysqlclient
-
-# Images
-Pillow
+asgiref==3.10.0
+cachetools==6.2.2
+certifi==2025.11.12
+cffi==2.0.0
+charset-normalizer==3.4.4
+cryptography==46.0.3
+Django==5.2.7
+django-allauth==65.13.1
+django-cors-headers==4.9.0
+djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
+google-auth==2.43.0
+gunicorn==23.0.0
+idna==3.11
+mysqlclient==2.2.7
+packaging==25.0
+pillow==12.0.0
+pyasn1==0.6.1
+pyasn1_modules==0.4.2
+pycparser==2.23
+PyJWT==2.10.1
+PyMySQL==1.1.2
+python-dotenv==1.2.1
+requests==2.32.5
+rsa==4.9.1
+sqlparse==0.5.3
+tzdata==2025.2
+urllib3==2.5.0
