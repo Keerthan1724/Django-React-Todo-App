@@ -38,6 +38,8 @@ const Navbar = () => {
           <h4> 📝 TODO APP</h4>
         </div>
 
+        <hr />
+
         <div className="sidebar-up">
           <ul className="sidebar-compo">
             <li>
