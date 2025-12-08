@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const APIUrl = import.meta.env.VITE_API_URL
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: APIUrl + "/api/",
 });
 
 api.interceptors.request.use(async (config) => {
@@ -16,7 +18,7 @@ api.interceptors.request.use(async (config) => {
 
   if (now > exp && refresh) {
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
+      const res = await axios.post(`${APIUrl}/api/token/refresh/`, {
         refresh,
       });
       access = res.data.access;

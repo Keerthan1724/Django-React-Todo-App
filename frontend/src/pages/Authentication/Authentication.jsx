@@ -28,6 +28,8 @@ const Authentication = () => {
 
   const otpRefs = [useRef(), useRef(), useRef(), useRef()];
 
+  const APIUrl = import.meta.env.VITE_API_URL
+
   useEffect(() => {
     if (timer === 0) {
       setButtonState("resend");
@@ -38,7 +40,7 @@ const Authentication = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
+      const response = await axios.post(`${APIUrl}/api/login/`, {
         username,
         password,
       });
@@ -58,7 +60,7 @@ const Authentication = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/api/signup/", {
+      await axios.post(`${APIUrl}/api/signup/`, {
         username,
         email,
         password,
@@ -90,7 +92,7 @@ const Authentication = () => {
     }
 
     try {
-      await axios.post("http://localhost:8000/api/send-otp/", { email });
+      await axios.post(`${APIUrl}/api/send-otp/`, { email });
       notify("OTP sent to Your email", "success");
 
       setAuthStep("otp");
@@ -145,7 +147,7 @@ const Authentication = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/verify-otp/",
+          `${APIUrl}/api/verify-otp/`,
           {
             email,
             otp: otpCode,
@@ -180,7 +182,7 @@ const Authentication = () => {
     }
 
     try {
-      await axios.post("http://localhost:8000/api/reset-password/", {
+      await axios.post(`${APIUrl}/api/reset-password/`, {
         email,
         otp: otp.join(""),
         new_password: password,
@@ -205,7 +207,7 @@ const Authentication = () => {
       try {
         console.log("TOKEN RESPONSE:", tokenResponse);
         const response = await axios.post(
-          "http://localhost:8000/api/google-login/",
+          `${APIUrl}/api/google-login/`,
           { token: tokenResponse.access_token }
         );
 
