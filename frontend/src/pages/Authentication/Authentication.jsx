@@ -68,10 +68,26 @@ const Authentication = () => {
 
       notify("Account created. Now sign in", "success");
       setSignState("Sign In");
-      navigate("/");
+      setPassword("");
     } catch (error) {
-      console.log(error.response.data);
-      notify("Signup failed", "error");
+      const errData = error.response?.data;
+
+      if (!errData) {
+        notify("Signup failed. Please try again later.", "error");
+        return;
+      }
+
+      if (errData.username) {
+        notify("Username already taken. Please choose another.", "error");
+      } else if (errData.email) {
+        notify("Email already registered. Try logging in instead.", "error");
+      } else if (errData.detail) {
+        notify(errData.detail, "error");
+      } else {
+        notify("Signup failed. Please check your input.", "error");
+      }
+
+      console.log("Signup error:", errData);
     }
   };
 
@@ -146,13 +162,10 @@ const Authentication = () => {
       }
 
       try {
-        const response = await axios.post(
-          `${APIUrl}/api/verify-otp/`,
-          {
-            email,
-            otp: otpCode,
-          }
-        );
+        const response = await axios.post(`${APIUrl}/api/verify-otp/`, {
+          email,
+          otp: otpCode,
+        });
 
         if (response.data.message === "OTP verified") {
           notify("OTP verified. You can reset password now.", "success");
@@ -206,10 +219,9 @@ const Authentication = () => {
     onSuccess: async (tokenResponse) => {
       try {
         console.log("TOKEN RESPONSE:", tokenResponse);
-        const response = await axios.post(
-          `${APIUrl}/api/google-login/`,
-          { token: tokenResponse.access_token }
-        );
+        const response = await axios.post(`${APIUrl}/api/google-login/`, {
+          token: tokenResponse.access_token,
+        });
 
         notify("Google Login Successful", "success");
 
