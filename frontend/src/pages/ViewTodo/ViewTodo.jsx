@@ -11,6 +11,8 @@ const ViewTodo = () => {
   const [filter, setFilter] = useState("all");
   const navigate = useNavigate();
 
+  const APIUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("access");
@@ -20,7 +22,7 @@ const ViewTodo = () => {
       }
 
       try {
-        const response = await api.get("http://127.0.0.1:8000/api/todos/", {
+        const response = await api.get(`${APIUrl}/api/todos/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -53,7 +55,7 @@ const ViewTodo = () => {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`http://127.0.0.1:8000/api/todos/${id}/`, {
+      await api.delete(`${APIUrl}/api/todos/${id}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

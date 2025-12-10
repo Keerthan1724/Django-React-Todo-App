@@ -9,6 +9,8 @@ const CreateTodo = () => {
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
 
+  const APIUrl = import.meta.env.VITE_API_URL;
+
   const handleAutoExpand = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
@@ -25,7 +27,7 @@ const CreateTodo = () => {
 
     try {
       const response = await api.post(
-        "http://127.0.0.1:8000/api/todos/",
+        `${APIUrl}/api/todos/`,
         {
           title,
           description,

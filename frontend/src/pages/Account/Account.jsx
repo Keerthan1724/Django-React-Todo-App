@@ -17,6 +17,8 @@ const Account = () => {
 
   const [profileImage, setProfileImage] = useState("");
 
+  const APIUrl = import.meta.env.VITE_API_URL;
+
   const handelUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -33,7 +35,7 @@ const Account = () => {
         },
       });
 
-      const fullURL = "http://127.0.0.1:8000" + response.data.profile_image;
+      const fullURL = APIUrl + response.data.profile_image;
       setProfileImage(fullURL);
     } catch (err) {
       console.log("Upload error:", err);
@@ -56,7 +58,7 @@ const Account = () => {
         });
 
         setProfileImage(
-          data.profile_image ? "http://127.0.0.1:8000" + data.profile_image : ""
+          data.profile_image ? APIUrl + data.profile_image : ""
         );
       } catch (error) {
         console.log("Error fetching user data:", error);

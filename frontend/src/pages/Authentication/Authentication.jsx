@@ -10,8 +10,6 @@ import email_icon from "../../assets/email_icon.svg";
 import user_icon from "../../assets/user_icon.svg";
 import { notify } from "../../utils/toastHelper";
 
-console.log("API URL:", import.meta.env.VITE_API_URL);
-
 const Authentication = () => {
   const navigate = useNavigate();
 
@@ -30,7 +28,7 @@ const Authentication = () => {
 
   const otpRefs = [useRef(), useRef(), useRef(), useRef()];
 
-  const APIUrl = import.meta.env.VITE_API_URL
+  const APIUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (timer === 0) {

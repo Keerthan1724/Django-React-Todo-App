@@ -17,6 +17,8 @@ const TodoDetails = () => {
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
 
+  const APIUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("access");
@@ -27,7 +29,7 @@ const TodoDetails = () => {
 
       try {
         const response = await api.get(
-          `http://127.0.0.1:8000/api/todos/${id}/`,
+          `${APIUrl}/api/todos/${id}/`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setTodo(response.data);
@@ -56,7 +58,7 @@ const TodoDetails = () => {
     try {
       const updateTodo = { title, description, completed };
       const response = await api.put(
-        `http://127.0.0.1:8000/api/todos/${id}/`,
+        `${APIUrl}/api/todos/${id}/`,
         updateTodo,
         { headers: { Authorization: `Bearer ${token}` } }
       );
