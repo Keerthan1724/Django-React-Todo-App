@@ -113,6 +113,54 @@
     border-radius: 8px;
 }
 
+.preview-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.preview-box {
+    position: relative;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    animation: fadeIn .2s ease-out;
+}
+
+.preview-box img {
+    max-width: 90vw;
+    max-height: 70vh;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.close-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: white;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
 
 @media (max-width: 700px) {
 
@@ -189,5 +237,20 @@
         padding: 10px;
         font-size: 13px;
         font-weight: 400;
+    }
+
+    .preview-box {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .preview-box img {
+        max-height: 60vh;
+    }
+
+    .close-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
     }
 }
