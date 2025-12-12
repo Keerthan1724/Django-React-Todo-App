@@ -289,10 +289,12 @@ const Authentication = () => {
 
               <button
                 type="button"
-                onClick={() => {
-                  if (signState === "Sign In")
-                    handleSignIn({ preventDefault: () => {} });
-                  else handleSignUp({ preventDefault: () => {} });
+                onClick={(e) => {
+                  if (signState === "Sign In") {
+                    handleSignIn(e);
+                  } else {
+                    handleSignUp(e);
+                  }
                 }}
               >
                 {signState}

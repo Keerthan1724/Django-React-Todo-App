@@ -16,6 +16,7 @@ const Account = () => {
   });
 
   const [profileImage, setProfileImage] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
   const APIUrl = import.meta.env.VITE_API_URL;
 
@@ -81,6 +82,10 @@ const Account = () => {
               src={profileImage || defaultAvatar}
               alt="profile"
               className="profile-pic"
+
+              // NEW: open preview modal
+              onClick={() => setShowPreview(true)}
+              style={{ cursor: "pointer" }}
             />
 
             <label className="upload-btn">
@@ -120,6 +125,24 @@ const Account = () => {
           </div>
         </div>
       </div>
+
+      {showPreview && (
+        <div className="preview-overlay" onClick={() => setShowPreview(false)}>
+          <div
+            className="preview-box"
+            onClick={(e) => e.stopPropagation()} // prevent accidental close
+          >
+            <img
+              src={profileImage || defaultAvatar}
+              alt="preview"
+            />
+            <button className="close-btn" onClick={() => setShowPreview(false)}>
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
