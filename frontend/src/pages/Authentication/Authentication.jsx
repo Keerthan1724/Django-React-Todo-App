@@ -66,9 +66,11 @@ const Authentication = () => {
         password,
       });
 
-      notify("Account created. Now sign in", "success");
-      setSignState("Sign In");
-      setPassword("");
+      if (res.status === 201 || res.status === 200) {
+        notify(res.data?.message || "Account created", "success");
+        setSignState("Sign In");
+        setPassword("");
+      }
     } catch (error) {
       const errData = error.response?.data;
 
