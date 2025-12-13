@@ -106,7 +106,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://6936d6286b041f0072270c3d--timely-sprinkles-a4e458.netlify.app",
+    "https://timely-sprinkles-a4e458.netlify.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -152,6 +152,6 @@ MEDIA_URL = "/media/"
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://6936d6286b041f0072270c3d--timely-sprinkles-a4e458.netlify.app",
+    "https://timely-sprinkles-a4e458.netlify.app",
     "https://django-react-todo-app-sfue.onrender.com",
 ]
