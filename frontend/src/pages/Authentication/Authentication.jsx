@@ -67,24 +67,27 @@ const Authentication = () => {
       });
 
       notify(res.data?.message || "Account created. Now sign in", "success");
-
       setSignState("Sign In");
       setPassword("");
     } catch (error) {
       const errData = error.response?.data;
+      let errorMessage = "Signup failed! Network or server error.";
 
-      if (!errData) {
-        notify("Signup failed!", "error");
-        return;
+      if (errData) {
+        if (typeof errData === "object") {
+          const allErrors = Object.values(errData).flat();
+
+          if (allErrors.length > 0) {
+            errorMessage = allErrors[0];
+          } else if (errData.detail) {
+            errorMessage = errData.detail;
+          }
+        } else if (typeof errData === "string" && errData.length > 0) {
+          errorMessage = errData;
+        }
       }
 
-      if (errData.username) {
-        notify("Username already taken.", "error");
-      } else if (errData.email) {
-        notify("Email already registered.", "error");
-      } else {
-        notify("Signup failed!", "error");
-      }
+      notify(errorMessage, "error");
     }
   };
 
