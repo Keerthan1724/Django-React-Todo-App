@@ -60,36 +60,31 @@ const Authentication = () => {
     e.preventDefault();
 
     try {
-      await axios.post(`${APIUrl}/api/signup/`, {
+      const res = await axios.post(`${APIUrl}/api/signup/`, {
         username,
         email,
         password,
       });
 
-      if (res.status === 201 || res.status === 200) {
-        notify(res.data?.message || "Account created", "success");
-        setSignState("Sign In");
-        setPassword("");
-      }
+      notify(res.data?.message || "Account created. Now sign in", "success");
+
+      setSignState("Sign In");
+      setPassword("");
     } catch (error) {
       const errData = error.response?.data;
 
       if (!errData) {
-        notify("Signup failed. Please try again later.", "error");
+        notify("Signup failed!", "error");
         return;
       }
 
       if (errData.username) {
-        notify("Username already taken. Please choose another.", "error");
+        notify("Username already taken.", "error");
       } else if (errData.email) {
-        notify("Email already registered. Try logging in instead.", "error");
-      } else if (errData.detail) {
-        notify(errData.detail, "error");
+        notify("Email already registered.", "error");
       } else {
-        notify("Signup failed. Please check your input.", "error");
+        notify("Signup failed!", "error");
       }
-
-      console.log("Signup error:", errData);
     }
   };
 
