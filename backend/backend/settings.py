@@ -149,3 +149,9 @@ DEFAULT_FROM_EMAIL = f"{EMAIL_DISPLAY_NAME} <{EMAIL_HOST_USER}>"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://6936d6286b041f0072270c3d--timely-sprinkles-a4e458.netlify.app",
+    "https://django-react-todo-app-sfue.onrender.com",
+]
