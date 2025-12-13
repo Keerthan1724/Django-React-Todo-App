@@ -24,7 +24,8 @@ const Account = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setProfileImage(URL.createObjectURL(file));
+    const localPreview = URL.createObjectURL(file);
+    setProfileImage(localPreview);
 
     const formData = new FormData();
     formData.append("profile_image", file);
@@ -36,8 +37,7 @@ const Account = () => {
         },
       });
 
-      const fullURL = APIUrl + response.data.profile_image;
-      setProfileImage(fullURL);
+      setProfileImage(response.data.profile_image);
     } catch (err) {
       console.log("Upload error:", err);
     }

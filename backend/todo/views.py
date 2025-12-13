@@ -37,7 +37,10 @@ class SignupView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        send_welcome_email(user)
+        try:
+            send_welcome_email(user)
+        except Exception as e:
+            print(f"Error sending welcome email: {e}")
 
         return Response({"message": "Account created"}, status=status.HTTP_201_CREATED)
     
@@ -214,7 +217,7 @@ class UploadProfileImageView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
-    def  post(self, request):
+    def post(self, request):
         file = request.FILES.get('profile_image')
         if not file:
             return Response({"error": "No file uploaded"}, status=400)
@@ -223,4 +226,6 @@ class UploadProfileImageView(APIView):
         profile.profile_image = file
         profile.save()
 
-        return Response({"profile_image": profile.profile_image.url})
+        full_image_url = request.build_absolute_uri(profile.profile_image.url)
+
+        return Response({"profile_image": full_image_url})
